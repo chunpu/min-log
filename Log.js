@@ -10,7 +10,7 @@ function Log(opt) {
 	}
 	opt = opt || {}
 	me.name = opt.name || Log.defaultName
-	me.enabled = isNameMatch(Log.name, me.name)
+	me.enabled = me.isNameMatch(me.name)
 	me.Log = Log
 }
 
@@ -22,7 +22,8 @@ var defaultConfig = {
 	defaultName: 'default',
 	name: '*',
 	prefix: '',
-	outputFilters: [],
+	// TODO format layout
+	outputFilters: [], // 叫 log4j 叫 appender, seelog 叫 writer
 	logFilters: [logFilter1]
 }
 
@@ -134,7 +135,46 @@ function getLogger(name) {
 	return logger
 }
 
-function isNameMatch(pattern, name) {
-	// TODO
-	return true
+proto.isNameMatch = function(name) {
+	var me = this
+	var pattern = me.pattern || normalizePattern(me.name)
+	function regMatch(reg) {
+		return ret.test(name)
+	}
+	if (_.some(pattern.skips, regMatch)) {
+		return false
+	}
+	if (_.some(pattern.names, regMatch)) {
+		return true
+	}
+	return false
+}
+
+Log.refreshName = function(name) {
+	Log.pattern = null // clear pattern
+	_.forIn(loggers, function(logger) {
+		logger.enabled = logger.isNameMatch(name)
+	})
+}
+
+function normalizePattern(pattern) {
+	var skips = []
+	var names = []
+
+	if (is.string(pattern)) {
+		_.each(pattern.split(/[\s,]+/), function(name) {
+			name = name.replace(/\*/g, '.*?')
+			var first = name.charAt(0)
+			if ('-' == first) {
+				skips.push(new RegExp('^' + _.slice(name, 1) + '$'))
+			} else {
+				names.push(new RegExp('^' + name + '$'))
+			}
+		})
+	}
+
+	return {
+		skips: skips,
+		names: names
+	}
 }

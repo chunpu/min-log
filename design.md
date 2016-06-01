@@ -21,6 +21,8 @@ name 在 loggers 这个 map 中是唯一的，loggers 已 name 为 key
 
 name 匹配使用通配符
 
+为什么选择 debug 那个 pattern 模式，因为针对每个 name 配置 level 啥的太复杂了，太细节了
+
 `Log.name` 默认是 `*`
 
 `log.name` 默认值 `default`
