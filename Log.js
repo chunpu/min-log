@@ -1,0 +1,140 @@
+var _ = require('min-util')
+var is = _.is
+
+module.exports = exports = Log
+
+function Log(opt) {
+	var me = this
+	if (is.string(opt)) {
+		opt = {name: opt}
+	}
+	opt = opt || {}
+	me.name = opt.name || Log.defaultName
+	me.enabled = isNameMatch(Log.name, me.name)
+	me.Log = Log
+}
+
+var defaultConfig = {
+	level: 0, // print all level
+	MAX_LOG_LEN: 3000,
+	debugKey: 'debug',
+	defaultLevelName: 'log',
+	defaultName: 'default',
+	name: '*',
+	prefix: '',
+	outputFilters: [],
+	logFilters: [logFilter1]
+}
+
+_.extend(Log, defaultConfig)
+
+var loggers = {} // cache all logger
+var logs = Log.logs = []
+var console = global.console
+if (console) {
+	Log.outputFilters.push(defaultOutput)
+}
+
+var LEVEL = {
+	name2code: {
+		// error always > info
+		log: 1,
+		debug: 2,
+		info: 3,
+		warn: 4,
+		error: 5
+	},
+	toname: function(name) {
+		if (is.number(name)) {
+			name = LEVEL.code2name[name]
+		}
+		if (!is.string(name)) {
+			name = Log.defaultLevelName
+		}
+		return name
+	},
+	tocode: function(code) {
+		if (is.string(code)) {
+			code = LEVEL[_.lower(code)]
+		}
+		if (!is.number(code)) {
+			code = LEVEL.name2code[Log.defaultLevelName]
+		}
+		return code
+	}
+}
+
+LEVEL.code2name = _.invert(LEVEL.name2code)
+
+var proto = Log.prototype
+
+proto.getLogger = getLogger
+
+proto.getLevelFunction = function(level) {
+	var code = LEVEL.tocode(level)
+	var me = this
+	return function() {
+		me.print(code, arguments)
+	}
+}
+
+_.each(_.keys(LEVEL.name2code), function(level) {
+	var code = LEVEL.tocode(level)
+	proto[level] = function() {
+		var me = this
+		me.print(code, arguments)
+	}
+})
+
+proto.print = function(levelCode, data) {
+	var me = this
+	if (me.enabled && levelCode >= Log.level) {
+		var item = {
+			level: levelCode,
+			name: me.name,
+			data: data
+		}
+		_.each(Log.logFilters, function(logFilter) {
+			logFilter(item, Log.lastLog)
+		})
+		Log.lastLog = item
+		_.each(Log.outputFilters, function(outputFilter) {
+			outputFilter(item)	
+		})
+	}
+}
+
+function defaultOutput(item) {
+	// cache output
+	var levelName = LEVEL.toname(item.level)
+	Function.prototype.apply.call(console[levelName], console, item.data)
+}
+
+function logFilter1(item) {
+	// data name level time
+	item.time = _.now()
+	saveLog(item)
+}
+
+function saveLog(item) {
+	// TODO lru cache
+	logs.push(item)
+	if (logs.length > Log.MAX_LOG_LEN) {
+		logs.shift()
+	}
+}
+
+function getLogger(name) {
+	// inspired by log4j getLogger
+	name = name || Log.defaultName
+	var logger = loggers[name]
+	if (!logger) {
+		logger = loggers[name] = new Log(name)
+	}
+	return logger
+}
+
+function isNameMatch(pattern, name) {
+	// TODO
+	return true
+}
