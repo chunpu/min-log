@@ -14,13 +14,15 @@ function Log(opt) {
 	me.Log = Log
 }
 
+// static
+
 var defaultConfig = {
 	level: 0, // print all level
 	MAX_LOG_LEN: 3000,
 	debugKey: 'debug',
 	defaultLevelName: 'log',
 	defaultName: 'default',
-	name: '*',
+	_name: '*', // can not use name
 	prefix: '',
 	// TODO format layout
 	outputFilters: [], // 叫 log4j 叫 appender, seelog 叫 writer
@@ -65,7 +67,77 @@ var LEVEL = {
 	}
 }
 
+
 LEVEL.code2name = _.invert(LEVEL.name2code)
+
+Log.setLevel = function(level) {
+	Log.level = LEVEL.tocode(level)
+}
+
+Log.setName = function(name) {
+	Log._name = name
+	Log.pattern = normalizePattern(name)
+	_.forIn(loggers, function(logger) {
+		logger.enabled = logger.isNameMatch(name)
+	})
+}
+
+Log.setName(Log._name)
+Log.setLevel(Log.level)
+
+function defaultOutput(item) {
+	// cache output
+	var levelName = LEVEL.toname(item.level)
+	Function.prototype.apply.call(console[levelName], console, item.data)
+}
+
+function logFilter1(item) {
+	// data name level time
+	item.time = _.now()
+	saveLog(item)
+}
+
+function saveLog(item) {
+	// TODO lru cache
+	logs.push(item)
+	if (logs.length > Log.MAX_LOG_LEN) {
+		logs.shift()
+	}
+}
+
+function getLogger(name) {
+	// inspired by log4j getLogger
+	name = name || Log.defaultName
+	var logger = loggers[name]
+	if (!logger) {
+		logger = loggers[name] = new Log(name)
+	}
+	return logger
+}
+
+function normalizePattern(pattern) {
+	var skips = []
+	var names = []
+
+	if (is.string(pattern)) {
+		_.each(pattern.split(/[\s,]+/), function(name) {
+			name = name.replace(/\*/g, '.*?')
+			var first = name.charAt(0)
+			if ('-' == first) {
+				skips.push(new RegExp('^' + _.slice(name, 1) + '$'))
+			} else {
+				names.push(new RegExp('^' + name + '$'))
+			}
+		})
+	}
+
+	return {
+		skips: skips,
+		names: names
+	}
+}
+
+// private
 
 var proto = Log.prototype
 
@@ -105,41 +177,11 @@ proto.print = function(levelCode, data) {
 	}
 }
 
-function defaultOutput(item) {
-	// cache output
-	var levelName = LEVEL.toname(item.level)
-	Function.prototype.apply.call(console[levelName], console, item.data)
-}
-
-function logFilter1(item) {
-	// data name level time
-	item.time = _.now()
-	saveLog(item)
-}
-
-function saveLog(item) {
-	// TODO lru cache
-	logs.push(item)
-	if (logs.length > Log.MAX_LOG_LEN) {
-		logs.shift()
-	}
-}
-
-function getLogger(name) {
-	// inspired by log4j getLogger
-	name = name || Log.defaultName
-	var logger = loggers[name]
-	if (!logger) {
-		logger = loggers[name] = new Log(name)
-	}
-	return logger
-}
-
 proto.isNameMatch = function(name) {
 	var me = this
-	var pattern = me.pattern || normalizePattern(me.name)
+	var pattern = Log.pattern
 	function regMatch(reg) {
-		return ret.test(name)
+		return reg.test(name)
 	}
 	if (_.some(pattern.skips, regMatch)) {
 		return false
@@ -150,31 +192,3 @@ proto.isNameMatch = function(name) {
 	return false
 }
 
-Log.refreshName = function(name) {
-	Log.pattern = null // clear pattern
-	_.forIn(loggers, function(logger) {
-		logger.enabled = logger.isNameMatch(name)
-	})
-}
-
-function normalizePattern(pattern) {
-	var skips = []
-	var names = []
-
-	if (is.string(pattern)) {
-		_.each(pattern.split(/[\s,]+/), function(name) {
-			name = name.replace(/\*/g, '.*?')
-			var first = name.charAt(0)
-			if ('-' == first) {
-				skips.push(new RegExp('^' + _.slice(name, 1) + '$'))
-			} else {
-				names.push(new RegExp('^' + name + '$'))
-			}
-		})
-	}
-
-	return {
-		skips: skips,
-		names: names
-	}
-}
