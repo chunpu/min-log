@@ -156,8 +156,14 @@ Log.init 按 url, env, localStorage 的顺序寻找 debugKey 的值作为 `Log.n
 会重新把现存的 logger enabled 状态刷新一遍
 
 
+### 为什么 exports 的是 default log 而不是 Log
+
+因为 node 的 console 就是这样的，console.Console 才拿到构造函数
+
+
 参考文档
 
+- node console https://nodejs.org/api/console.html
 - Specifications <https://github.com/DeveloperToolsWG/console-object/blob/master/api.md#consolelogobject--object->
 - Nodejs `util.format` <https://nodejs.org/dist/latest-v6.x/docs/api/util.html#util_util_format_format>
 - chrome doc <https://developer.chrome.com/devtools/docs/console-api#consolelogobject-object>

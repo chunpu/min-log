@@ -24,8 +24,8 @@ var defaultConfig = {
 	defaultName: 'default',
 	_name: '*', // can not use name
 	prefix: '',
-	// TODO format layout
-	outputFilters: [], // 叫 log4j 叫 appender, seelog 叫 writer
+	// TODO format layout?
+	outputers: [], // 叫 log4j 叫 appender, seelog 叫 writer
 	logFilters: [logFilter1]
 }
 
@@ -35,7 +35,7 @@ var loggers = {} // cache all logger
 var logs = Log.logs = []
 var console = global.console
 if (console) {
-	Log.outputFilters.push(defaultOutput)
+	Log.outputers.push(defaultOutput)
 }
 
 var LEVEL = {
@@ -58,7 +58,7 @@ var LEVEL = {
 	},
 	tocode: function(code) {
 		if (is.string(code)) {
-			code = LEVEL[_.lower(code)]
+			code = LEVEL.name2code[_.lower(code)]
 		}
 		if (!is.number(code)) {
 			code = LEVEL.name2code[Log.defaultLevelName]
@@ -82,8 +82,43 @@ Log.setName = function(name) {
 	})
 }
 
+Log.getPlainLog = function() {
+	return _.map(Log.logs, function(item) {
+		return _.slice(item.data).join(' ')
+	}).join('\r\n')
+}
+
+Log.getLogger = getLogger
+
 Log.setName(Log._name)
 Log.setLevel(Log.level)
+
+Log.init = function(key) {
+	key = key || Log.debugKey
+	var name
+
+	if (global.location) {
+		var reg = new RegExp(key + '=(\\S+)')
+		var res = reg.exec(location.href)
+		if (res) {
+			name = res[1]
+		}
+	}
+
+	if (null == name && global.localStorage) {
+		try {
+			name = localStorage[key]
+		} catch (ignore) {}
+	}
+
+	if (null == name && global.process) {
+		name = _.get(process, ['env', key])
+	}
+
+	if (null != name) {
+		Log.setName(name)
+	}
+}
 
 function defaultOutput(item) {
 	// cache output
@@ -153,6 +188,7 @@ proto.getLevelFunction = function(level) {
 
 _.each(_.keys(LEVEL.name2code), function(level) {
 	var code = LEVEL.tocode(level)
+	Log[_.upper(level)] = code
 	proto[level] = function() {
 		var me = this
 		me.print(code, arguments)
@@ -171,8 +207,8 @@ proto.print = function(levelCode, data) {
 			logFilter(item, Log.lastLog)
 		})
 		Log.lastLog = item
-		_.each(Log.outputFilters, function(outputFilter) {
-			outputFilter(item)	
+		_.each(Log.outputers, function(outputer) {
+			outputer(item, Log)
 		})
 	}
 }
