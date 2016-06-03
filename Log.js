@@ -90,7 +90,17 @@ Log.setName = function(name) {
 
 Log.getPlainLog = function() {
 	return _.map(Log.logs, function(item) {
-		return _.slice(item.data).join(' ')
+		return _.map(item.data, function(val) {
+			var ret = val
+			if (global.JSON) {
+				try {
+					ret = JSON.stringify(val)
+				} catch (err) {
+					ret = '[Nested]'
+				}
+			}
+			return ret
+		}).join(' ')
 	}).join('\r\n')
 }
 
