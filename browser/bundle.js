@@ -47,7 +47,6 @@
 	var assert = __webpack_require__(1)
 	var log = __webpack_require__(6)
 	var Log = log.Log
-	var colorOutputer = __webpack_require__(19)
 
 	assert = function(bool) {
 		if (!bool) {
@@ -56,7 +55,7 @@
 	}
 
 	// Log.setLevel('error')
-	Log.outputers = [colorOutputer]
+	Log.outputers = [Log.custom.outputers.color]
 	Log.init()
 	// Log.setName('log*,-noshow*')
 
@@ -1241,7 +1240,12 @@
 		prefix: '',
 		// TODO format layout?
 		outputers: [], // 叫 log4j 叫 appender, seelog 叫 writer
-		logFilters: [logFilter1]
+		logFilters: [logFilter1],
+		custom: {
+			outputers: {
+				color: __webpack_require__(19)
+			}
+		}
 	}
 
 	_.extend(Log, defaultConfig)

@@ -26,7 +26,12 @@ var defaultConfig = {
 	prefix: '',
 	// TODO format layout?
 	outputers: [], // 叫 log4j 叫 appender, seelog 叫 writer
-	logFilters: [logFilter1]
+	logFilters: [logFilter1],
+	custom: {
+		outputers: {
+			color: require('./outputers/color')
+		}
+	}
 }
 
 _.extend(Log, defaultConfig)
@@ -67,8 +72,9 @@ var LEVEL = {
 	}
 }
 
-
 LEVEL.code2name = _.invert(LEVEL.name2code)
+
+Log.LEVEL = LEVEL // TODO make level a class?
 
 Log.setLevel = function(level) {
 	Log.level = LEVEL.tocode(level)
@@ -121,7 +127,6 @@ Log.init = function(key) {
 }
 
 function defaultOutput(item) {
-	// cache output
 	var levelName = LEVEL.toname(item.level)
 	Function.prototype.apply.call(console[levelName], console, item.data)
 }

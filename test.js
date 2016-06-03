@@ -1,7 +1,6 @@
 var assert = require('assert')
 var log = require('./')
 var Log = log.Log
-var colorOutputer = require('./outputers/color')
 
 assert = function(bool) {
 	if (!bool) {
@@ -10,7 +9,7 @@ assert = function(bool) {
 }
 
 // Log.setLevel('error')
-Log.outputers = [colorOutputer]
+Log.outputers = [Log.custom.outputers.color]
 Log.init()
 // Log.setName('log*,-noshow*')
 
