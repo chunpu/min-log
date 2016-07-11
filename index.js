@@ -1,4 +1,4 @@
-var Log = require('./Log')
+var Log = require('./log')
 
 var defaultLog = new Log()
 

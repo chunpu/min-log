@@ -53,4 +53,4 @@ assert(Log.MAX_LOG_LEN == Log.logs.length)
 
 var txt = Log.getPlainLog()
 
-alert(txt)
+// alert(txt)
