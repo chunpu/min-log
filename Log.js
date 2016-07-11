@@ -46,6 +46,7 @@ if (console) {
 var LEVEL = {
 	name2code: {
 		// error always > info
+		verbose: 0,
 		log: 1,
 		debug: 2,
 		info: 3,
