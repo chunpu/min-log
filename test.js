@@ -34,6 +34,7 @@ log1.log('log1', 'second')
 
 // console.log(Log.logs)
 
+// 此处只运行在可打印日志的地方 enable 地方
 assert(2 == Log.logs.length)
 
 assert('log1' == Log.logs[0].name)

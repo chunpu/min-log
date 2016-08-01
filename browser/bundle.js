@@ -82,6 +82,8 @@
 
 	assert(2 == Log.logs.length)
 
+	console.log(Log.logs.length)
+
 	assert('log1' == Log.logs[0].name)
 	assert(Log.ERROR == Log.logs[0].level)
 	assert('log2' == Log.logs[1].name)
@@ -99,7 +101,7 @@
 
 	var txt = Log.getPlainLog()
 
-	alert(txt)
+	// alert(txt)
 
 
 /***/ },
@@ -1203,7 +1205,7 @@
 
 	var Log = __webpack_require__(7)
 
-	var defaultLog = new Log()
+	var defaultLog = Log.getLogger()
 
 	module.exports = exports = defaultLog
 
@@ -1236,7 +1238,7 @@
 		debugKey: 'debug',
 		defaultLevelName: 'log',
 		defaultName: 'default',
-		_name: '*', // can not use name
+		_name: '', // can not use name, default should be empty for online mode
 		prefix: '',
 		// TODO format layout?
 		outputers: [], // 叫 log4j 叫 appender, seelog 叫 writer
@@ -1260,6 +1262,7 @@
 	var LEVEL = {
 		name2code: {
 			// error always > info
+			verbose: 0,
 			log: 1,
 			debug: 2,
 			info: 3,
@@ -1286,8 +1289,9 @@
 		}
 	}
 
-
 	LEVEL.code2name = _.invert(LEVEL.name2code)
+
+	Log.LEVEL = LEVEL // TODO make level a class?
 
 	Log.setLevel = function(level) {
 		Log.level = LEVEL.tocode(level)
@@ -1303,7 +1307,17 @@
 
 	Log.getPlainLog = function() {
 		return _.map(Log.logs, function(item) {
-			return _.slice(item.data).join(' ')
+			return _.map(item.data, function(val) {
+				var ret = val
+				if (global.JSON) {
+					try {
+						ret = JSON.stringify(val)
+					} catch (err) {
+						ret = '[Nested]'
+					}
+				}
+				return ret
+			}).join(' ')
 		}).join('\r\n')
 	}
 
@@ -1340,7 +1354,6 @@
 	}
 
 	function defaultOutput(item) {
-		// cache output
 		var levelName = LEVEL.toname(item.level)
 		Function.prototype.apply.call(console[levelName], console, item.data)
 	}
@@ -1373,7 +1386,7 @@
 		var skips = []
 		var names = []
 
-		if (is.string(pattern)) {
+		if (pattern && is.string(pattern)) {
 			_.each(pattern.split(/[\s,]+/), function(name) {
 				name = name.replace(/\*/g, '.*?')
 				var first = name.charAt(0)

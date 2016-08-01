@@ -22,7 +22,7 @@ var defaultConfig = {
 	debugKey: 'debug',
 	defaultLevelName: 'log',
 	defaultName: 'default',
-	_name: '*', // can not use name
+	_name: '', // can not use name, default should be empty for online mode
 	prefix: '',
 	// TODO format layout?
 	outputers: [], // 叫 log4j 叫 appender, seelog 叫 writer
@@ -170,7 +170,7 @@ function normalizePattern(pattern) {
 	var skips = []
 	var names = []
 
-	if (is.string(pattern)) {
+	if (pattern && is.string(pattern)) {
 		_.each(pattern.split(/[\s,]+/), function(name) {
 			name = name.replace(/\*/g, '.*?')
 			var first = name.charAt(0)

@@ -1,5 +1,5 @@
 var Log = require('./log')
 
-var defaultLog = new Log()
+var defaultLog = Log.getLogger()
 
 module.exports = exports = defaultLog
