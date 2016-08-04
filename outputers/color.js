@@ -7,6 +7,8 @@ var lastTime
 
 var console = global.console
 
+var cacheColorMap = {}
+
 module.exports = _.noop
 if (console) {
 	module.exports = colorLog
@@ -15,7 +17,7 @@ if (console) {
 function colorLog(item, Log) {
 	var now = _.now()
 	var ms = now - (lastTime || now)
-	var color = 'color:' + getColor()
+	var color = 'color:' + getColor(item.name)
 	lastTime = now
 
 	var label = Log.prefix + item.name
@@ -33,6 +35,9 @@ function colorLog(item, Log) {
 	console.log.apply(console, arr)
 }
 
-function getColor() {
-	return colors[colorIndex++ % colors.length]
+function getColor(name) {
+	if (!cacheColorMap[name]) {
+		cacheColorMap[name] = colors[colorIndex++ % colors.length]
+	}
+	return cacheColorMap[name]
 }

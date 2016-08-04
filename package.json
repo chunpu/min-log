@@ -1,11 +1,11 @@
 {
   "name": "min-log",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "simple but full function logger",
   "main": "index.js",
   "scripts": {
     "test": "",
-	"dev": "webpack example.js --output-filename browser/bundle.js"
+	"dev": "webpack test.js --output-filename browser/bundle.js"
   },
   "author": "",
   "license": "ISC",
