@@ -114,6 +114,8 @@ Log.init = function(key) {
 	key = key || Log.debugKey
 	var name
 
+	// try get name
+	// get by url first
 	if (global.location) {
 		var reg = new RegExp(key + '=(\\S+)')
 		var res = reg.exec(location.href)
@@ -122,12 +124,15 @@ Log.init = function(key) {
 		}
 	}
 
-	if (null == name && global.localStorage) {
+	// then localStorage
+	if (null == name) {
 		try {
+			// never test global.localStorage, will also crash in no cookie mode
 			name = localStorage[key]
 		} catch (ignore) {}
 	}
 
+	// then env
 	if (null == name && global.process) {
 		name = _.get(process, ['env', key])
 	}

@@ -81,12 +81,14 @@
 	// console.log(Log.logs)
 
 	// 此处只运行在可打印日志的地方 enable 地方
-	assert(2 == Log.logs.length)
+	if (log1.enabled && log2.enabled) {
+		assert(2 == Log.logs.length)
 
-	assert('log1' == Log.logs[0].name)
-	assert(Log.ERROR == Log.logs[0].level)
-	assert('log2' == Log.logs[1].name)
-	assert(Log.ERROR == Log.logs[1].level)
+		assert('log1' == Log.logs[0].name)
+		assert(Log.ERROR == Log.logs[0].level)
+		assert('log2' == Log.logs[1].name)
+		assert(Log.ERROR == Log.logs[1].level)
+	}
 
 	Log.outputers.length = 0
 
@@ -1329,6 +1331,8 @@
 		key = key || Log.debugKey
 		var name
 
+		// try get name
+		// get by url first
 		if (global.location) {
 			var reg = new RegExp(key + '=(\\S+)')
 			var res = reg.exec(location.href)
@@ -1337,12 +1341,15 @@
 			}
 		}
 
-		if (null == name && global.localStorage) {
+		// then localStorage
+		if (null == name) {
 			try {
+				// never test global.localStorage, will also crash in no cookie mode
 				name = localStorage[key]
 			} catch (ignore) {}
 		}
 
+		// then env
 		if (null == name && global.process) {
 			name = _.get(process, ['env', key])
 		}
