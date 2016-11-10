@@ -137,10 +137,11 @@ Log.init = function(key) {
 		name = _.get(process, ['env', key])
 	}
 
-	if (null != name) {
-		Log.setName(name)
-	}
+	// 没有 name 也要 set, 要清除日志
+	Log.setName(name)
 }
+
+Log.init() // always self init, so can use directly
 
 function defaultOutput(item) {
 	var levelName = LEVEL.toname(item.level)
@@ -237,6 +238,10 @@ proto.print = function(levelCode, data) {
 proto.isNameMatch = function(name) {
 	var me = this
 	var pattern = Log.pattern
+	if (!name) {
+		// clear all
+		return false
+	}
 	function regMatch(reg) {
 		return reg.test(name)
 	}

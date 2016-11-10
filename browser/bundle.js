@@ -54,9 +54,10 @@
 		}
 	}
 
+	Log.init('mydebug')
+
 	// Log.setLevel('error')
 	Log.outputers = [Log.custom.outputers.color]
-	Log.init()
 	// Log.setName('log*,-noshow*')
 
 	// console.log(Log)
@@ -1354,10 +1355,11 @@
 			name = _.get(process, ['env', key])
 		}
 
-		if (null != name) {
-			Log.setName(name)
-		}
+		// 没有 name 也要 set, 要清除日志
+		Log.setName(name)
 	}
+
+	Log.init() // always self init, so can use directly
 
 	function defaultOutput(item) {
 		var levelName = LEVEL.toname(item.level)
@@ -1454,6 +1456,9 @@
 	proto.isNameMatch = function(name) {
 		var me = this
 		var pattern = Log.pattern
+		if (!name) {
+			return false
+		}
 		function regMatch(reg) {
 			return reg.test(name)
 		}

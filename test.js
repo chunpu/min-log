@@ -8,9 +8,10 @@ assert = function(bool) {
 	}
 }
 
+Log.init('mydebug')
+
 // Log.setLevel('error')
 Log.outputers = [Log.custom.outputers.color]
-Log.init()
 // Log.setName('log*,-noshow*')
 
 // console.log(Log)
