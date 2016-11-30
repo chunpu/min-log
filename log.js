@@ -1,5 +1,6 @@
 var _ = require('min-util')
 var is = _.is
+var safeConsole = require('./safeconsole')
 
 module.exports = exports = Log
 
@@ -38,8 +39,8 @@ _.extend(Log, defaultConfig)
 
 var loggers = {} // cache all logger
 var logs = Log.logs = []
-var console = global.console
-if (console) {
+
+if (safeConsole.hasConsole()) {
 	Log.outputers.push(defaultOutput)
 }
 
@@ -145,7 +146,7 @@ Log.init() // always self init, so can use directly
 
 function defaultOutput(item) {
 	var levelName = LEVEL.toname(item.level)
-	Function.prototype.apply.call(console[levelName], console, item.data)
+	safeConsole.console(levelName, item.data)
 }
 
 function logFilter1(item) {

@@ -1,17 +1,27 @@
 var _ = require('min-util')
+var safeConsole = require('../safeconsole')
 
 var colors = 'lightseagreen forestgreen goldenrod dodgerblue darkorchid crimson'.split(' ')
 var colorIndex = 0
 var inherit = 'color:inherit'
 var lastTime
 
-var console = global.console
-
 var cacheColorMap = {}
 
 module.exports = _.noop
-if (console) {
-	module.exports = colorLog
+if (safeConsole.hasConsole()) {
+	if (isIE()) {
+		// ie no color
+		module.exports = function(item, Log) {
+			safeConsole.console('log', item.data)
+		}
+	} else {
+		module.exports = colorLog
+	}
+}
+
+function isIE() {
+	return /Trident/i.test(navigator.userAgent)
 }
 
 function colorLog(item, Log) {
@@ -32,7 +42,7 @@ function colorLog(item, Log) {
 	arr.push(color)
 	main += '%c +' + ms + 'ms'
 	arr[0] = main
-	console.log.apply(console, arr)
+	safeConsole.console('log', arr)
 }
 
 function getColor(name) {
