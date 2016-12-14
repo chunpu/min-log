@@ -2965,6 +2965,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var _ = __webpack_require__(8)
+	var is = _.is
 	var safeConsole = __webpack_require__(19)
 
 	var colors = 'lightseagreen forestgreen goldenrod dodgerblue darkorchid crimson'.split(' ')
@@ -2975,8 +2976,9 @@
 	var cacheColorMap = {}
 
 	module.exports = _.noop
+
 	if (safeConsole.hasConsole()) {
-		if (isIE()) {
+		if (isIE() || !is.browser) {
 			// ie no color
 			module.exports = function(item, Log) {
 				safeConsole.console('log', item.data)
@@ -2987,7 +2989,12 @@
 	}
 
 	function isIE() {
-		return /Trident/i.test(navigator.userAgent)
+		if (is.browser) {
+			if (/Trident/i.test(navigator.userAgent)) {
+				return true
+			}
+		}
+		return false
 	}
 
 	function colorLog(item, Log) {
