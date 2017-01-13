@@ -12,18 +12,30 @@ var cacheColorMap = {}
 module.exports = _.noop
 
 if (safeConsole.hasConsole()) {
-	if (isIE() || !is.browser) {
-		// ie no color
+	if (supportColor()) {
+		module.exports = colorLog
+	} else {
 		module.exports = function(item, Log) {
 			safeConsole.console('log', item.data)
 		}
-	} else {
-		module.exports = colorLog
 	}
 }
 
+function supportColor() {
+	if (is.wechatApp()) {
+		return true
+	}
+	if (isIE()) { // 可能可以改成 is.h5
+		return false
+	}
+	if (!is.browser()) {
+		return false
+	}
+	return true
+}
+
 function isIE() {
-	if (is.browser) {
+	if (is.browser()) {
 		if (/Trident/i.test(navigator.userAgent)) {
 			return true
 		}

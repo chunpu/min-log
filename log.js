@@ -119,7 +119,7 @@ Log.init = function(key) {
 	// get by url first
 	if (global.location) {
 		var reg = new RegExp(key + '=(\\S+)')
-		var res = reg.exec(location.href)
+		var res = reg.exec(global.location.href)
 		if (res) {
 			name = res[1]
 		}
@@ -135,7 +135,7 @@ Log.init = function(key) {
 
 	// then env
 	if (null == name && global.process) {
-		name = _.get(process, ['env', key])
+		name = _.get(global, ['process', 'env', key])
 	}
 
 	// 没有 name 也要 set, 要清除日志

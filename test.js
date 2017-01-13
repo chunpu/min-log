@@ -1,6 +1,7 @@
 var assert = require('assert')
 var log = require('./')
 var Log = log.Log
+var is = require('min-is')
 
 assert = function(bool) {
 	if (!bool) {
@@ -8,7 +9,11 @@ assert = function(bool) {
 	}
 }
 
-Log.init('mydebug')
+if (is.wechatApp()) {
+	Log.setName('*')
+} else {
+	Log.init('mydebug')
+}
 
 // Log.setLevel('error')
 Log.outputers = [Log.custom.outputers.color]

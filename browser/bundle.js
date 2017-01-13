@@ -47,6 +47,7 @@
 	var assert = __webpack_require__(1)
 	var log = __webpack_require__(6)
 	var Log = log.Log
+	var is = __webpack_require__(11)
 
 	assert = function(bool) {
 		if (!bool) {
@@ -54,7 +55,11 @@
 		}
 	}
 
-	Log.init('mydebug')
+	if (is.wechatApp()) {
+		Log.setName('*')
+	} else {
+		Log.init('mydebug')
+	}
 
 	// Log.setLevel('error')
 	Log.outputers = [Log.custom.outputers.color]
@@ -1437,7 +1442,7 @@
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global, process) {var _ = __webpack_require__(8)
+	/* WEBPACK VAR INJECTION */(function(global) {var _ = __webpack_require__(8)
 	var is = _.is
 	var safeConsole = __webpack_require__(19)
 
@@ -1558,7 +1563,7 @@
 		// get by url first
 		if (global.location) {
 			var reg = new RegExp(key + '=(\\S+)')
-			var res = reg.exec(location.href)
+			var res = reg.exec(global.location.href)
 			if (res) {
 				name = res[1]
 			}
@@ -1574,7 +1579,7 @@
 
 		// then env
 		if (null == name && global.process) {
-			name = _.get(process, ['env', key])
+			name = _.get(global, ['process', 'env', key])
 		}
 
 		// 没有 name 也要 set, 要清除日志
@@ -1695,7 +1700,7 @@
 	}
 
 
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(3)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
 /* 8 */
@@ -1883,7 +1888,7 @@
 	}
 
 	function indexOf(val, sub) {
-		if (is.str(val)) return val.indexOf(sub)
+		if (is.string(val)) return val.indexOf(sub)
 
 		return findIndex(val, function(item) {
 			// important!
@@ -1929,27 +1934,43 @@
 
 	var navigator = global.navigator
 
-	// reserved words in es3
+	// reserved words in es3: instanceof null undefined arguments boolean false true function int
+	// only have is.string and is.object, not is.str and is.obj
 	// instanceof null undefined arguments boolean false true function int
 
-	is.browser = (function() {
-		return global.window == global
-	})()
+	is.browser = function() {
+		if (!is.wechatApp()) {
+			if (navigator && global.window == global) {
+				return true
+			}
+		}
+		return false
+	}
 
 	// simple modern browser detect
-	is.h5 = (function() {
-		if (is.browser && navigator.geolocation) {
+	is.h5 = function() {
+		if (is.browser() && navigator.geolocation) {
 			return true
 		}
 		return false
-	})()
+	}
 
-	is.mobile = (function() {
-		if (is.browser && /mobile/i.test(navigator.userAgent)) {
+	is.mobile = function() {
+		if (is.browser() && /mobile/i.test(navigator.userAgent)) {
 			return true
 		}
 		return false
-	})()
+	}
+
+	is.wechatApp = function() {
+		if ('object' == typeof wx) {
+			if (wx && is.fn(wx.createVideoContext)) {
+				// wechat js sdk has no createVideoContext
+				return true
+			}
+		}
+		return false
+	}
 
 	function _class(val) {
 		var name = obj.toString.call(val)
@@ -1985,13 +2006,13 @@
 		return val == Infinity || val == -Infinity
 	}
 
-	is.num = is.number = function(num) {
+	is.number = function(num) {
 		return !isNaN(num) && 'number' == _class(num)
 	}
 
 	// integer or decimal
 	is.iod = function(val) {
-		if (is.num(val) && !is.infinite(val)) {
+		if (is.number(val) && !is.infinite(val)) {
 			return true
 		}
 		return false
@@ -2021,7 +2042,7 @@
 	}
 
 	// regexp should return object
-	is.obj = is.object = function(obj) {
+	is.object = function(obj) {
 		return is.oof(obj) && 'function' != _class(obj)
 	}
 
@@ -2047,13 +2068,13 @@
 		return 'function' == _class(fn)
 	}
 
-	is.str = is.string = function(str) {
+	is.string = function(str) {
 		return 'string' == _class(str)
 	}
 
 	// number or string
 	is.nos = function(val) {
-		return is.iod(val) || is.str(val)
+		return is.iod(val) || is.string(val)
 	}
 
 	is.array = function(arr) {
@@ -2062,7 +2083,7 @@
 
 	is.arraylike = function(arr) {
 		// window has length for iframe too, but it is not arraylike
-		if (!is.window(arr) && is.obj(arr)) {
+		if (!is.window(arr) && is.object(arr)) {
 			var len = arr.length
 			if (is.integer(len) && len >= 0) {
 				return true
@@ -2079,7 +2100,7 @@
 	}
 
 	is.empty = function(val) {
-		if (is.str(val) || is.arraylike(val)) {
+		if (is.string(val) || is.arraylike(val)) {
 			return 0 === val.length
 		}
 		if (is.hash(val)) {
@@ -2102,6 +2123,7 @@
 	is.regexp = function(val) {
 		return 'regexp' == _class(val)
 	}
+
 
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
@@ -2189,9 +2211,24 @@
 	}
 
 	_.uniq = function(arr) {
+		return _.uniqBy(arr)
+	}
+
+	_.uniqBy = function(arr, fn) {
 		var ret = []
+		var pool = []
+		if (!is.fn(fn)) {
+			fn = null
+		}
 		each(arr, function(item) {
-			if (!includes(ret, item)) ret.push(item)
+			var val = item
+			if (fn) {
+				val = fn(item)
+			}
+			if (!includes(pool, val)) {
+				pool.push(val)
+				ret.push(item)
+			}
 		})
 		return ret
 	}
@@ -2955,7 +2992,8 @@
 	exports.console = function(level, arr) {
 		// support ie8+
 		// http://stackoverflow.com/questions/5538972/console-log-apply-not-working-in-ie9
-		Function.prototype.apply.call(console[level], console, arr)
+		var apply = Function.prototype.apply || console[level].apply // wechat has no Function.prototype.apply
+		apply.call(console[level], console, arr)
 	}
 
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
@@ -2978,18 +3016,30 @@
 	module.exports = _.noop
 
 	if (safeConsole.hasConsole()) {
-		if (isIE() || !is.browser) {
-			// ie no color
+		if (supportColor()) {
+			module.exports = colorLog
+		} else {
 			module.exports = function(item, Log) {
 				safeConsole.console('log', item.data)
 			}
-		} else {
-			module.exports = colorLog
 		}
 	}
 
+	function supportColor() {
+		if (is.wechatApp()) {
+			return true
+		}
+		if (isIE()) { // 可能可以改成 is.h5
+			return false
+		}
+		if (!is.browser()) {
+			return false
+		}
+		return true
+	}
+
 	function isIE() {
-		if (is.browser) {
+		if (is.browser()) {
 			if (/Trident/i.test(navigator.userAgent)) {
 				return true
 			}
