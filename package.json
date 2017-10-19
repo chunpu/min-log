@@ -1,6 +1,6 @@
 {
   "name": "min-log",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "simple but full function logger",
   "main": "./src/index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "build": "webpack",
     "dev": "webpack --progress --colors --watch --config webpack.test.config.js",
     "lint": "eslint --ext .js src",
-    "release": "npm run build && git push origin gh-pages && npm publish"
+    "release": "npm run build && git commit -amm && git push origin gh-pages && npm publish"
   },
   "author": "chunpu",
   "license": "ISC",
