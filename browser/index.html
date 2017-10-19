@@ -1,4 +1,32 @@
+<div>
+  <form>
+    <div>
+      <label>Outputer: </label>
+      <label><input name="outputer" type="radio" value="simple">simple</label>
+      <label><input name="outputer" type="radio" value="browser_html" checked>browser_html</label>
+      <label><input name="outputer" type="radio" value="browser_color">browser_color</label>
+      <label><input name="outputer" type="radio" value="node_color">node_color</label>
+    </div>
+    <div>
+      <label>Level: </label>
+      <label><input name="level" type="radio" value="verbose">verbose</label>
+      <label><input name="level" type="radio" value="debug" checked>debug</label>
+      <label><input name="level" type="radio" value="info">info</label>
+      <label><input name="level" type="radio" value="warn">warn</label>
+      <label><input name="level" type="radio" value="error">error</label>
+    </div>
+    <div>
+      <label>Namespace: </label>
+      <label><input name="name" type="radio" value="*" checked>enable all</label>
+      <label><input name="name" type="radio" value="">disable all</label>
+    </div>
+  </form>
+</div>
+
+<script src="./jquery-1.12.4.min.js"></script>
 <script src="log.js"></script>
+<script src="demo.js"></script>
 <script>
 log.debug('halo!')
 </script>
+

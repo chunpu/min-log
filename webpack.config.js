@@ -5,11 +5,14 @@ var path = require('path')
 var banner = `${pkg.name}@${pkg.version} by ${pkg.author}`
 
 var config = {
-  entry: pkg.main,
+  entry: {
+    log: pkg.main,
+    demo: './demo.js'
+  },
   output: {
     path: path.join(__dirname, 'browser'),
-    filename: 'log.js',
-    library: 'log',
+    filename: '[name].js',
+    library: '[name]',
     libraryTarget: 'umd'
   },
   plugins: [

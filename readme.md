@@ -1,7 +1,7 @@
 min-log
 ---
 
-Debug module for browsers which can Display on page or in Console, for Phone and old IE debugging
+Debug module for browsers which can Display on page or in Console, for Phone and old IE debugging inspired by [tj@debug](https://github.com/visionmedia/debug)
 
 ## Installation
 

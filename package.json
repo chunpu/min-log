@@ -6,7 +6,7 @@
   "scripts": {
     "test": "webpack --config webpack.test.config.js",
     "build": "webpack",
-    "dev": "webpack --progress --colors --watch --config webpack.test.config.js",
+    "dev": "webpack --progress --colors --watch",
     "lint": "eslint --ext .js src",
     "release": "npm run build && git commit -amm && git push origin gh-pages"
   },
