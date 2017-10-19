@@ -1,23 +1,20 @@
 var assert = require('assert')
 var log = require('./')
-var Log = log.Log
-var is = require('min-is')
+var sdk = log.sdk
+var is = require('min-util').is
 
-assert = function(bool) {
-	if (!bool) {
-		// alert(11111111)
-	}
+if (is.browser()) {
+  window.log = log
 }
 
-if (is.wechatApp()) {
-	Log.setName('*')
-} else {
-	Log.init('mydebug')
-}
+// assert = function(bool) {
+// 	if (!bool) {
+// 		alert(11111111)
+// 	}
+// }
 
-// Log.setLevel('error')
-Log.outputers = [Log.custom.outputers.color]
-// Log.setName('log*,-noshow*')
+log.sdk.setLevel(log.levels.DEBUG)
+log.sdk.setName('log*,-noshow*')
 
 // console.log(Log)
 
@@ -26,7 +23,7 @@ var log1 = log.getLogger('log1')
 var log2 = log.getLogger('log2')
 var log1again = log.getLogger('log1')
 
-assert(log1 === log1again)
+assert.equal(log1, log1again, 'cache log')
 
 noshow.log('no show')
 log1.log('log1 first')
@@ -42,24 +39,24 @@ log1.log('log1', 'second')
 
 // 此处只运行在可打印日志的地方 enable 地方
 if (log1.enabled && log2.enabled) {
-	assert(2 == Log.logs.length)
+  var history = sdk.history
+	assert.equal(history.length, 7) // save all log
 
-	assert('log1' == Log.logs[0].name)
-	assert(Log.ERROR == Log.logs[0].level)
-	assert('log2' == Log.logs[1].name)
-	assert(Log.ERROR == Log.logs[1].level)
+	assert.equal('log1', history[2].name)
+	assert.equal(log.levels.ERROR, history[2].level)
+	assert.equal('log2', history[4].name)
+	assert.equal(log.levels.ERROR, history[4].level)
 }
 
-Log.outputers.length = 0
+// log.sdk.disableHistory()
 
-/*
+
 for (var i = 0; i < 4000; i++) {
 	log1.error(1111)
 }
-*/
+assert.equal(sdk.historySize, sdk.history.length)
 
-assert(Log.MAX_LOG_LEN == Log.logs.length)
 
-var txt = Log.getPlainLog()
+var txt = sdk.save()
 
-// alert(txt)
+alert(txt)
