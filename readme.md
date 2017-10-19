@@ -67,6 +67,8 @@ log.sdk.setLevel(log.levels.DEBUG) // set debug level
 
 ### Outputer
 
+Outputer | Usage
+--- | ---
 `simple` | simple output like `console.log`
 `node_color` | print log with color in node
 `browser_color` | print log with color in browser
