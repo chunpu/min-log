@@ -23,5 +23,15 @@ function supportBrowserColor() {
   return true
 }
 
+function safeStringify(val) {
+  try {
+    val = JSON.stringify(val, 0, 4)
+  } catch (e) {
+    val += ''
+  }
+  return val
+}
+
 exports.isIE = isIE
 exports.supportBrowserColor = supportBrowserColor
+exports.safeStringify = safeStringify

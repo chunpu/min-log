@@ -3,6 +3,8 @@ var log = require('./')
 var sdk = log.sdk
 var is = require('min-util').is
 
+sdk.setOutputer('browser_html')
+
 if (is.browser()) {
   window.log = log
 }

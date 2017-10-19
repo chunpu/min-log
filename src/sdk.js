@@ -92,6 +92,9 @@ proto.setOutputer = function(outputName) {
   }
   if (outputer) {
     sdk.outputer = outputer
+    if (is.fn(outputer.init)) {
+      outputer.init(sdk)
+    }
   }
 }
 
@@ -100,7 +103,7 @@ proto.output = function(item) {
   if (item.enabled) {
     if (item.level >= sdk.level) {
       // output enabled log
-      sdk.outputer.handler.call(sdk, item)
+      sdk.outputer.handler(item, sdk)
       sdk.lastItem = item // save last enabled log
     }
   }
@@ -174,14 +177,7 @@ proto.save = function() {
   var sdk = this
   return _.map(sdk.history, function(item) {
     return _.map(item.data, function(val) {
-      var ret = val
-      if (global.JSON) {
-        try {
-          ret = JSON.stringify(val)
-        } catch (err) {
-          ret = '[Nested]'
-        }
-      }
+      var ret = util.safeStringify(val)
       return ret
     }).join(' ')
   }).join('\r\n')
