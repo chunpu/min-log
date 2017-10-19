@@ -12,7 +12,7 @@ proto.init = function(sdk) {
   var doc = document
   if (!box) {
     box = doc.createElement('div')
-    box.style.cssText = 'z-index:999;width:100%;height:300px;overflow:auto;line-height:1.4;background:#333;color:#fff;font:16px Consolas;border:none;'
+    box.style.cssText = 'z-index:999;padding:16px;height:300px;overflow:auto;line-height:1.4;background:#333;color:#fff;font:16px Consolas;border:none;'
     var parent = doc.body || doc.documentElement
     parent.insertBefore(box, parent.firstChild)
   }
@@ -31,7 +31,7 @@ proto.handler = function(item, sdk) {
   })
   arr.push('+' + delta + 'ms')
   var line = document.createElement('div')
-  line.textContent = arr.join(' ')
+  line.innerHTML = arr.join(' ') // textContent fail
   line.style.color = item.color
   box.appendChild(line)
 }
