@@ -52,13 +52,11 @@ if (log1.enabled && log2.enabled) {
 
 // log.sdk.disableHistory()
 
-
 for (var i = 0; i < 4000; i++) {
 	log1.error(1111)
 }
 assert.equal(sdk.historySize, sdk.history.length)
 
-
 var txt = sdk.save()
 
-alert(txt)
+// alert(txt)

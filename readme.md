@@ -3,14 +3,14 @@ min-log
 
 Debug module for browsers which can Display on page or in Console, for Phone and old IE debugging
 
-### Installation
+## Installation
 
 ```sh
 yarn add min-log
 ```
 
 
-### Usage
+## Usage
 
 ```js
 var log = require('min-log')
@@ -18,7 +18,7 @@ var log = require('min-log')
 log.debug('hello')
 ```
 
-#### Advanced Usage
+### Advanced Usage
 
 debug with namespace like package name
 
@@ -29,7 +29,7 @@ log.debug('this file log')
 ```
 
 
-##### Run Debug Code Block
+#### Run Debug Code Block
 
 ```js
 var log = require('min-log')
@@ -38,7 +38,7 @@ if (log.enabled) {
 }
 ```
 
-#### Log History
+### Log History
 
 `min-log` default enable history, default history size is `3000`
 
@@ -58,6 +58,25 @@ Save history by `log.save()`
 1. info 普通用户需要关注的信息, 比如登入登出
 1. warning 一些警告, 但不严重, 比如 cookie 过期
 1. error 严重的错误, 程序报错, 后端返回错误
+
+Set Level
+
+```js
+log.sdk.setLevel(log.levels.DEBUG) // set debug level
+```
+
+### Outputer
+
+`simple` | simple output like `console.log`
+`node_color` | print log with color in node
+`browser_color` | print log with color in browser
+`browser_html` | print log in document by html (for old IE or phone website)
+
+Set Outputer
+
+```js
+log.sdk.setOutputer('browser_color') // set browser color outputer
+```
 
 ### Formatter
 
