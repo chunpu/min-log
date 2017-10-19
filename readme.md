@@ -75,5 +75,5 @@ Formatter | Representation
 
 ### Reference
 
-[Chrome 使用控制台](https://developers.google.com/web/tools/chrome-devtools/console/)
-[Chrome 使用控制台参考](https://developers.google.com/web/tools/chrome-devtools/console/console-reference)
+- [Chrome 使用控制台](https://developers.google.com/web/tools/chrome-devtools/console/)
+- [Chrome 使用控制台参考](https://developers.google.com/web/tools/chrome-devtools/console/console-reference)
