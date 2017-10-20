@@ -11,9 +11,17 @@ $(function() {
   $('input').on('click', function() {
     onChangeOption()
   })
+  $form = $('form')
+  var _ = log._
+  var query = log.qs.parse(_.slice(location.search, 1))
+  _.forIn(query, function(val, key) {
+    var $input = $form.find('[name=' + key + ']').filter(function() {
+      return $(this).val() === val
+    })
+    $input.prop('checked', true)
+  })
+  setTimeout(run, 500)
 })
-
-setTimeout(run, 500)
 
 function run() {
   var delta = 300
