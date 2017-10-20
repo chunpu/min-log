@@ -10,7 +10,7 @@ var config = {
     demo: './demo.js'
   },
   output: {
-    path: path.join(__dirname, 'browser'),
+    path: path.join(__dirname, 'dist'),
     filename: '[name].js',
     library: '[name]',
     libraryTarget: 'umd'
