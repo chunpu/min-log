@@ -31,7 +31,7 @@ proto.handler = function(item, sdk) {
   })
   arr.push('+' + delta + 'ms')
   var line = document.createElement('div')
-  line.innerHTML = arr.join(' ') // textContent fail
+  util.text(line, arr.join(' '))
   line.style.color = item.color
   box.appendChild(line)
 }

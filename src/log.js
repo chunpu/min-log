@@ -1,7 +1,9 @@
 var _ = require('min-util')
 var is = _.is
-var level = require('./level')
+var Level = require('./level')
 var Sdk = require('./sdk')
+var util = require('./util')
+var qs = require('min-qs')
 var sdk = new Sdk()
 
 module.exports = exports = Log
@@ -14,13 +16,18 @@ function Log(opt) {
   opt = opt || {}
   var name = opt.name || 'default' // namespace
   log.name = name
-  log.levels = level
+  log.Level = Level
   log.sdk = sdk
   log.enabled = sdk.isNameEnabled(name)
   log.color = opt.color || log.sdk.getRandomColor(name)
+
+  // just for handy usage
+  log.util = util
+  log._ = _
+  log.qs = qs
 }
 
-var levelNames = _.map(_.keys(level), function(level) {
+var levelNames = _.map(_.keys(Level), function(level) {
   return _.lower(level)
 })
 
@@ -53,15 +60,28 @@ proto.output = function(levelCode, data) {
 }
 
 _.each(levelNames, function(levelName) {
-  var levelCode = level[_.upper(levelName)]
+  var levelCode = Level.toCode(levelName)
   proto[levelName] = function() {
     this.output(levelCode, arguments)
   }
+  // is enabled function
+  var isLevelEnabled = 'is' + _.capitalize(levelName) + 'Enabled'
+  proto[isLevelEnabled] = function() {
+    return this.sdk.isLevelEnabled(levelCode)
+  }
 })
 
-proto.getLevelFunction = function(levelCode) {
+var sdkFuncNames = 'setOptions setOutputer setName setLevel setHistorySize getHistory disableHistory clear save'.split(' ')
+
+_.each(sdkFuncNames, function(name) {
+  proto[name] = function() {
+    return this.sdk[name].apply(this.sdk, arguments)
+  }
+})
+
+proto.getLevelFunction = function(level) {
   var log = this
-  levelCode = levelCode || level.DEBUG // default is debug
+  var levelCode = Level.toCode(level) || Level.DEBUG
   return function() {
     log.output(levelCode, arguments)
   }

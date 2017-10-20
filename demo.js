@@ -1,5 +1,5 @@
 var errlog = log.getLogger({name: 'error', color: 'red'})
-var log1 = log.getLogger('worker:a')
+var log1 = log.getLogger('com.worker:a')
 var log2 = log.getLogger('worker:b')
 
 $(function() {
@@ -10,18 +10,10 @@ $(function() {
 })
 
 function init() {
-  var arr = $('form').serializeArray()
-  for (var i = 0; i < arr.length; i++) {
-    var name = arr[i].name
-    var val = arr[i].value
-    if (name === 'outputer') {
-      log.sdk.setOutputer(val)
-    } else if (name === 'name') {
-      log.sdk.setName(val)
-    } else if (name === 'level') {
-      log.sdk.setLevel(log.levels[val.toUpperCase()])
-    }
-  }
+  var val = $('form').serialize()
+  var qs = log.qs.parse(val)
+  log.setOptions(qs)
+  log.clear()
   run()
 }
 
@@ -38,15 +30,15 @@ function run() {
   })
 
   delay(function() {
-    log1.debug('this is', log1.name)
+    log1.debug('this name is', log1.name)
   })
 
   delay(function() {
-    log2.debug('this is', log2.name)
+    log2.debug('this name is', log2.name)
   })
 
   delay(function() {
-    errlog.error('this is', errlog.name, 'my color is red')
+    errlog.error('this name is', errlog.name, 'my color is red')
   })
 
   delay(function() {
@@ -70,8 +62,24 @@ function run() {
   })
 
   delay(function() {
-    if (log1.enabled) {
-      log1.debug('put mock code block in `if (log.enabled)`')
+    log1.debug('this color is', log1.color)
+  })
+
+  delay(function() {
+    log2.debug('this color is', log2.color)
+  })
+
+  delay(function() {
+    errlog.debug('this color is', errlog.color)
+  })
+
+  delay(function() {
+    if (log1.isDebugEnabled()) {
+      log1.debug('put mock code block in `if (log.isDebugEnabled()) {}`')
     }
+  })
+
+  delay(function() {
+    errlog.debug('current log history is', log.getHistory().length)
   })
 }

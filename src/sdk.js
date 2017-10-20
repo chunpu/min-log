@@ -1,4 +1,4 @@
-var level = require('./level')
+var Level = require('./level')
 var outputers = require('./outputers')
 var safeConsole = require('./safeconsole')
 var util = require('./util')
@@ -12,10 +12,9 @@ module.exports = Sdk
 function Sdk() {
   var sdk = this
   sdk.history = []
-  sdk.levels = level
+  sdk.Level = Level
   sdk.loggers = {} // logger cache
-  sdk.level = level.DEBUG // default use debug level
-  sdk.debugKey = 'debug'
+  sdk.level = null
   sdk.prefix = ''
   sdk.pattern = {} // match namespace pattern
   sdk.lastItem = null // last log item
@@ -33,22 +32,48 @@ function Sdk() {
 var proto = Sdk.prototype
 
 proto.autoInit = function() {
+  // auto init: outputer name level
   var sdk = this
-  sdk.autoSetOutputer()
-  sdk.autoSetName()
+  var defaultOpt = sdk.getDefaultOptions()
+  var userOpt = sdk.getUserOptions()
+  var opt = _.extend({}, defaultOpt, userOpt)
+  sdk.setOptions(opt)
 }
 
-proto.autoSetOutputer = function() {
-  // 自动选择输出方式
+proto.setOptions = function(opt) {
+  var sdk = this
+  sdk.setName(opt.name)
+  sdk.setLevel(opt.level)
+  sdk.setOutputer(opt.outputer)
+}
+
+proto.getDefaultOptions = function() {
+  var sdk = this
+  var ret = {
+    level: Level.INFO, // default use info level, so debug and verbose log is hidden
+    outputer: sdk.autoChooseOutputer(),
+    name: '*' // enable all namespace
+  }
+  return ret
+}
+
+proto.getUserOptions = function() {
+  return util.getUserOptions('log_name log_level log_outputer'.split(' '))
+}
+
+proto.autoChooseOutputer = function() {
+  var outputer = _.noop
   if (safeConsole.hasConsole()) {
     if (util.supportBrowserColor()) {
-      this.setOutputer('browser_color')
+      outputer = 'browser_color'
     } else {
-      this.setOutputer('simple')
+      outputer = 'simple'
     }
   }
+  return outputer
 }
 
+// TODO
 proto.autoSetName = function() {
   // 自动从环境中获取 namespace
   var sdk = this
@@ -101,13 +126,21 @@ proto.setOutputer = function(outputName) {
 proto.output = function(item) {
   var sdk = this
   if (item.enabled) {
-    if (item.level >= sdk.level) {
+    if (sdk.isLevelEnabled(item.level)) {
       // output enabled log
       sdk.outputer.handler(item, sdk)
       sdk.lastItem = item // save last enabled log
     }
   }
   sdk.appendHistory(item) // save all log
+}
+
+proto.isLevelEnabled = function(level) {
+  var sdk = this
+  if (level >= sdk.level) {
+    return true
+  }
+  return false
 }
 
 proto.getRandomColor = function(name) {
@@ -150,7 +183,7 @@ proto.isNameEnabled = function(name) {
 }
 
 proto.setLevel = function(level) {
-  this.level = level
+  this.level = Level.toCode(level)
 }
 
 proto.appendHistory = function(item) {
@@ -163,6 +196,10 @@ proto.appendHistory = function(item) {
 
 proto.setHistorySize = function(historySize) {
   this.historySize = historySize
+}
+
+proto.getHistory = function() {
+  return this.history
 }
 
 proto.disableHistory = function() {

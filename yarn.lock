@@ -1488,7 +1488,13 @@ min-is@^2.1.0, min-is@latest:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/min-is/-/min-is-2.2.0.tgz#2d84ba26b7be7554afd470108f7265d4ce4b39b0"
 
-min-util@^2.3.0:
+min-qs@^1.3.0:
+  version "1.3.0"
+  resolved "http://registry.npm.qiwoo.org/min-qs/download/min-qs-1.3.0.tgz#3e1e50a94238656436748ff8b1da3ac9bde7b05d"
+  dependencies:
+    min-util latest
+
+min-util@^2.3.0, min-util@latest:
   version "2.3.0"
   resolved "http://registry.npm.qiwoo.org/min-util/download/min-util-2.3.0.tgz#95b7244de1ad8788cf3f1224dedd689176f64538"
   dependencies:

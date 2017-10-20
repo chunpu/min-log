@@ -33,7 +33,7 @@ log.debug('this file log')
 
 ```js
 var log = require('min-log')
-if (log.enabled) {
+if (log.isDebugEnabled()) {
   doSomeMockThing()
 }
 ```
@@ -73,6 +73,7 @@ Outputer | Usage
 `node_color` | print log with color in node
 `browser_color` | print log with color in browser
 `browser_html` | print log in document by html (for old IE or phone website)
+`vconsole` | print log in vconsole
 
 Set Outputer
 
@@ -94,7 +95,4 @@ Formatter | Representation
 `%%` | Single percent sign ('%'). This does not consume an argument
 
 
-### Reference
 
-- [Chrome 使用控制台](https://developers.google.com/web/tools/chrome-devtools/console/)
-- [Chrome 使用控制台参考](https://developers.google.com/web/tools/chrome-devtools/console/console-reference)

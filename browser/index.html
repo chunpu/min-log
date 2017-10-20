@@ -16,6 +16,7 @@
       <label><input name="outputer" type="radio" value="browser_html" checked>browser_html</label>
       <label><input name="outputer" type="radio" value="browser_color">browser_color</label>
       <label><input name="outputer" type="radio" value="node_color">node_color</label>
+      <label><input name="outputer" type="radio" value="vconsole">vconsole</label>
     </div>
     <div>
       <label>Level: </label>
@@ -24,10 +25,13 @@
       <label><input name="level" type="radio" value="info">info</label>
       <label><input name="level" type="radio" value="warn">warn</label>
       <label><input name="level" type="radio" value="error">error</label>
+      <label><input name="level" type="radio" value="fatal">fatal</label>
+      <label><input name="level" type="radio" value="off">off</label>
     </div>
     <div>
       <label>Namespace: </label>
       <label><input name="name" type="radio" value="*" checked>enable all</label>
+      <label><input name="name" type="radio" value="main*">only enable main*</label>
       <label><input name="name" type="radio" value="">disable all</label>
     </div>
   </form>

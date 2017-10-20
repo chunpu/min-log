@@ -1,6 +1,10 @@
-exports.VERBOSE = 0
-exports.DEBUG = 1
-exports.LOG = 2
-exports.INFO = 3
-exports.WARN = 4
-exports.ERROR = 5
+// https://logging.apache.org/log4j/2.x/manual/customloglevels.html
+var _ = require('min-util')
+
+_.each('verbose debug log info warn error fatal off'.split(' '), function(level, i) {
+  exports[_.upper(level)] = i + 1
+})
+
+exports.toCode = function(levelName) {
+  return exports[_.upper(levelName)] || levelName
+}
