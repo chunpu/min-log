@@ -14,7 +14,7 @@ proto.init = function(sdk) {
     var doc = global.document
     if (doc) {
       this.box = doc.createElement('div')
-      this.box.style.cssText = 'z-index:999;padding:16px;height:300px;overflow:auto;line-height:1.4;background:#333;color:#fff;font:16px Consolas;border:none;'
+      this.box.style.cssText = 'z-index:999;padding:16px;height:300px;overflow:auto;line-height:1.4;background:#242424;color:#fff;font:16px Consolas;border:none;text-align:left'
       var parent = doc.body || doc.documentElement
       parent.insertBefore(this.box, parent.firstChild)
     }
