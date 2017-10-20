@@ -1,47 +1,102 @@
+<!DOCTYPE html>
 <html>
-<head>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-    }
-  </style>
-</head>
-<body>
-<div>
+  <head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=EDGE, chrome=1">
+    <meta name="format-detection" content="telephone=no, email=no">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="x5-orientation" content="portrait">
+    <meta name="screen-orientation" content="portrait">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="description" content="min-log,debug"/>
+    <meta name="keywords" content="min-log"/>
+    <title>min-log demo</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        color: #5a5e66;
+      }
+      body {
+        font-family: SF Pro SC,SF Pro Text,SF Pro Icons,PingFang SC,microsoft yahei,Helvetica Neue,Helvetica,Arial,sans-serif;
+        -webkit-font-smoothing: antialiased;
+        font-size: 14px;
+      }
+      form {
+        width: 100%;
+        max-width: 700px;
+        _width: 700px;
+        margin: 50px auto;
+        text-align: left;
+        box-sizing: border-box;
+        padding: 1em;
+      }
+      form * {
+        line-height: 20px;
+      }
+      .form-group {
+        margin-bottom: 28px;
+      }
+      .form-item-label {
+        width: 80px;
+        float: left;
+        text-align: right;
+        padding: 0 12px 0 0;
+        display: block;
+      }
+      .form-item-content {
+        margin-left: 80px;
+      }
+      label + label {
+        margin-left: 14px;
+      }
+      input[type="radio"] {
+        margin-right: 4px;
+      }
+    </style>
+  </head>
+  <body>
+<div style="text-align: center">
   <form>
-    <div>
-      <label>Outputer: </label>
-      <label><input name="log_outputer" type="radio" value="console">console</label>
-      <label><input name="log_outputer" type="radio" value="browser_html">browser_html</label>
-      <label><input name="log_outputer" type="radio" value="browser_console">browser_console</label>
-      <label><input name="log_outputer" type="radio" value="node_console" disabled>node_console</label>
-      <label><input name="log_outputer" type="radio" value="vconsole">vconsole</label>
+    <div class="form-group row">
+      <label for="log_level" class="form-item-label col-form-label">Level: </label>
+      <div class="form-item-content">
+        <label><input name="log_level" type="radio" value="verbose">verbose</label>
+        <label><input name="log_level" type="radio" value="debug">debug</label>
+        <label><input name="log_level" type="radio" value="info">info</label>
+        <label><input name="log_level" type="radio" value="warn">warn</label>
+        <label><input name="log_level" type="radio" value="error">error</label>
+        <label><input name="log_level" type="radio" value="fatal">fatal</label>
+        <label><input name="log_level" type="radio" value="off">off</label>
+      </div>
     </div>
-    <div>
-      <label>Level: </label>
-      <label><input name="log_level" type="radio" value="verbose">verbose</label>
-      <label><input name="log_level" type="radio" value="debug">debug</label>
-      <label><input name="log_level" type="radio" value="info">info</label>
-      <label><input name="log_level" type="radio" value="warn">warn</label>
-      <label><input name="log_level" type="radio" value="error">error</label>
-      <label><input name="log_level" type="radio" value="fatal">fatal</label>
-      <label><input name="log_level" type="radio" value="off">off</label>
+
+    <div class="form-group row">
+      <label for="log_name" class="form-item-label col-form-label">Namespace: </label>
+      <div class="form-item-content">
+        <label><input name="log_name" type="radio" value="*">enable all</label>
+        <label><input name="log_name" type="radio" value="main*">only enable main*</label>
+        <label><input name="log_name" type="radio" value="">disable all</label>
+      </div>
     </div>
-    <div>
-      <label>Namespace: </label>
-      <label><input name="log_name" type="radio" value="*">enable all</label>
-      <label><input name="log_name" type="radio" value="main*">only enable main*</label>
-      <label><input name="log_name" type="radio" value="">disable all</label>
+
+    <div class="form-group row">
+      <label for="log_outputer" class="form-item-label col-form-label">Outputer: </label>
+      <div class="form-item-content">
+        <label><input name="log_outputer" type="radio" value="console">console</label>
+        <label><input name="log_outputer" type="radio" value="browser_html">browser_html</label>
+        <label><input name="log_outputer" type="radio" value="browser_console">browser_console</label>
+        <label><input name="log_outputer" type="radio" value="node_console" disabled>node_console</label>
+        <label><input name="log_outputer" type="radio" value="vconsole">vconsole</label>
+      </div>
     </div>
+
   </form>
 </div>
-
 <script src="./jquery-1.12.4.min.js"></script>
 <script src="log.js"></script>
 <script src="demo.js"></script>
-<script>
-log.debug('halo!')
-</script>
-</body>
+  </body>
 </html>
