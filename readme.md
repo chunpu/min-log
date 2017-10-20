@@ -1,7 +1,11 @@
 min-log
 ---
 
+![browser_console](https://user-images.githubusercontent.com/4565306/31819867-43e78e34-b564-11e7-9ad4-1877c97a3660.png)
+
 Debug module for browsers which can Display on page or in Console, for Phone and old IE debugging
+
+[Example page](http://chunpu.github.io/min-log/example)
 
 ## Installation
 
@@ -100,7 +104,13 @@ Name | Purpose
 --- | ---
 `log_name` | Enables/disables specific debugging namespaces
 `log_level` | Set log level like `debug`
-`log_outputer` | Set outputer like `browser_console`
+`log_outputer` | Set outputer like `browser_html`
+
+`min-log` will try to get user config from three ways in order
+
+1. `Query` in page url e.g. `my.site.com/path?log_name=*&log_level=debug&log_output=browser_html`
+1. `localStorage` e.g. `localStorage.log_level = debug`
+1. `Environment` e.g. `log_level=debug log_name=main* node app.js`
 
 ### Formatter
 

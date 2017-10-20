@@ -8,5 +8,6 @@ exports.handler = function(item) {
   } else if (level > Level.ERROR) {
     level = Level.ERROR
   }
-  safeConsole.console(Level.toName(level), item.data)
+  var levelName = Level.toName(level)
+  safeConsole.console(levelName, item.data)
 }
