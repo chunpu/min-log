@@ -65,9 +65,9 @@ proto.autoChooseOutputer = function() {
   var outputer = _.noop
   if (safeConsole.hasConsole()) {
     if (util.supportBrowserColor()) {
-      outputer = 'browser_color'
+      outputer = 'browser_console'
     } else {
-      outputer = 'simple'
+      outputer = 'console'
     }
   }
   return outputer

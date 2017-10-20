@@ -23,7 +23,7 @@ log.debug('hello')
 debug with namespace like package name
 
 ```js
-var log = require('min-log').getLogger('com:my:file')
+var log = require('min-log').getLogger('com:foo')
 
 log.debug('this file log')
 ```
@@ -62,7 +62,7 @@ Save history by `log.save()`
 Set Level
 
 ```js
-log.sdk.setLevel(log.levels.DEBUG) // set debug level
+log.setLevel('debug') // set debug level
 ```
 
 ### Outputer
@@ -78,7 +78,7 @@ Outputer | Usage
 Set Outputer
 
 ```js
-log.sdk.setOutputer('browser_color') // set browser color outputer
+log.setOutputer('browser_color') // set browser color outputer
 ```
 
 ### Formatter

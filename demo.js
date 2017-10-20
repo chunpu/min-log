@@ -1,6 +1,6 @@
 var errlog = log.getLogger({name: 'error', color: 'red'})
-var log1 = log.getLogger('com.worker:a')
-var log2 = log.getLogger('worker:b')
+var log1 = log.getLogger('main:a')
+var log2 = log.getLogger('main:b')
 
 $(function() {
   $('input').on('click', function() {
@@ -26,7 +26,7 @@ function run() {
   }
 
   delay(function() {
-    log.error('-------------------------')
+    log.error('start-------------------------')
   })
 
   delay(function() {
@@ -81,5 +81,9 @@ function run() {
 
   delay(function() {
     errlog.debug('current log history is', log.getHistory().length)
+  })
+
+  delay(function() {
+    log.error('finish-------------------------')
   })
 }

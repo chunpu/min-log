@@ -1,5 +1,5 @@
-exports.simple = require('./simple')
-exports.browser_color = require('./browsercolor')
-exports.node_color = require('./nodecolor')
+exports.console = require('./console')
+exports.browser_console = require('./browserconsole')
+exports.node_console = require('./nodeconsole')
 exports.file = require('./file')
 exports.browser_html = require('./browserhtml')

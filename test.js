@@ -1,9 +1,10 @@
 var assert = require('assert')
 var log = require('./')
 var sdk = log.sdk
+var debug = require('./debug')('debug')
 var is = require('min-util').is
 
-sdk.setOutputer('browser_html')
+// sdk.setOutputer('')
 
 if (is.browser()) {
   window.log = log
@@ -15,9 +16,9 @@ if (is.browser()) {
 // 	}
 // }
 
-log.sdk.setLevel(log.levels.DEBUG)
+log.sdk.setLevel('debug')
 log.sdk.setName('log*,-noshow*')
-
+// debug('this is debug style!')
 // console.log(Log)
 
 var noshow = log.getLogger('noshow')
@@ -45,17 +46,17 @@ if (log1.enabled && log2.enabled) {
 	assert.equal(history.length, 7) // save all log
 
 	assert.equal('log1', history[2].name)
-	assert.equal(log.levels.ERROR, history[2].level)
+	assert.equal(log.Level.ERROR, history[2].level)
 	assert.equal('log2', history[4].name)
-	assert.equal(log.levels.ERROR, history[4].level)
+	assert.equal(log.Level.ERROR, history[4].level)
 }
 
 // log.sdk.disableHistory()
 
-for (var i = 0; i < 4000; i++) {
-	log1.error(1111)
-}
-assert.equal(sdk.historySize, sdk.history.length)
+// for (var i = 0; i < 4000; i++) {
+// 	log1.error(1111)
+// }
+// assert.equal(sdk.historySize, sdk.history.length)
 
 var txt = sdk.save()
 
