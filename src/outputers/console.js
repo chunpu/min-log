@@ -1,5 +1,6 @@
+var Level = require('../level')
 var safeConsole = require('../safeconsole')
 
 exports.handler = function(item) {
-  safeConsole.console('log', item.data)
+  safeConsole.console(Level.toName(item.level), item.data)
 }

@@ -1,21 +1,22 @@
 var _ = require('min-util')
 var util = require('../util')
 
-var box = null // 唯一的
-
 function Output() {
+  this.inited = false
+  this.box = null
 }
 
 var proto = Output.prototype
 
 proto.init = function(sdk) {
-  var doc = global.document
-  if (doc) {
-    if (!box) {
-      box = doc.createElement('div')
-      box.style.cssText = 'z-index:999;padding:16px;height:300px;overflow:auto;line-height:1.4;background:#333;color:#fff;font:16px Consolas;border:none;'
+  if (!this.inited) {
+    this.inited = true
+    var doc = global.document
+    if (doc) {
+      this.box = doc.createElement('div')
+      this.box.style.cssText = 'z-index:999;padding:16px;height:300px;overflow:auto;line-height:1.4;background:#333;color:#fff;font:16px Consolas;border:none;'
       var parent = doc.body || doc.documentElement
-      parent.insertBefore(box, parent.firstChild)
+      parent.insertBefore(this.box, parent.firstChild)
     }
   }
 }
@@ -38,7 +39,7 @@ proto.handler = function(item, sdk) {
   var line = document.createElement('div')
   util.text(line, arr.join(' '))
   line.style.color = item.color
-  box.appendChild(line)
+  this.box.appendChild(line)
 }
 
 module.exports = new Output()

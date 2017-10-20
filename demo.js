@@ -2,20 +2,18 @@ var errlog = log.getLogger({name: 'error', color: 'red'})
 var log1 = log.getLogger('main:a')
 var log2 = log.getLogger('main:b')
 
+function onChangeOption() {
+  var val = $('form').serialize()
+  location.search = '?' + val
+}
+
 $(function() {
   $('input').on('click', function() {
-    init()
+    onChangeOption()
   })
-  init()
 })
 
-function init() {
-  var val = $('form').serialize()
-  var qs = log.qs.parse(val)
-  log.setOptions(qs)
-  log.clear()
-  run()
-}
+setTimeout(run, 500)
 
 function run() {
   var delta = 300

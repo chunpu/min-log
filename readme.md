@@ -42,14 +42,13 @@ if (log.isDebugEnabled()) {
 
 `min-log` default enable history, default history size is `3000`
 
-Disable history by `log.disableHistory()`
-
-Set history size by `log.setHistorySize(1000)`
-
-Clear history by  `log.clear()`
-
-Save history by `log.save()`
-
+Api | Description
+--- | ---
+`log.setHistorySize(1000)` | Set history size
+`log.disableHistory()` | Disable history
+`log.getHistory()` | Get history
+`log.clear()` | Clear history
+`log.save()` | Save history
 
 ### Debug Level
 
@@ -69,9 +68,9 @@ log.setLevel('debug') // set debug level
 
 Outputer | Usage
 --- | ---
-`simple` | simple output like `console.log`
-`node_color` | print log with color in node
-`browser_color` | print log with color in browser
+`console` | simple console output like `console.log`
+`node_console` | print log with color in node
+`browser_console` | print log with color in browser
 `browser_html` | print log in document by html (for old IE or phone website)
 `vconsole` | print log in vconsole
 
@@ -79,6 +78,16 @@ Set Outputer
 
 ```js
 log.setOutputer('browser_color') // set browser color outputer
+```
+
+### debug style
+
+if you only use debug level log just like [tj@debug](https://github.com/visionmedia/debug)
+
+```js
+var debug = require('min-log/debug')('http')
+
+debug('booting')
 ```
 
 ### Formatter
@@ -93,6 +102,3 @@ Formatter | Representation
 `%d` | Number
 `%j` | JSON
 `%%` | Single percent sign ('%'). This does not consume an argument
-
-
-

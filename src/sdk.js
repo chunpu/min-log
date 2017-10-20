@@ -58,7 +58,12 @@ proto.getDefaultOptions = function() {
 }
 
 proto.getUserOptions = function() {
-  return util.getUserOptions('log_name log_level log_outputer'.split(' '))
+  var opt = util.getUserOptions('log_name log_level log_outputer'.split(' '))
+  return {
+    name: opt.log_name,
+    level: opt.log_level,
+    outputer: opt.log_outputer
+  }
 }
 
 proto.autoChooseOutputer = function() {
@@ -71,40 +76,6 @@ proto.autoChooseOutputer = function() {
     }
   }
   return outputer
-}
-
-// TODO
-proto.autoSetName = function() {
-  // 自动从环境中获取 namespace
-  var sdk = this
-  var key = sdk.debugKey
-  var name
-
-  // try get name
-  // get by url first
-  if (global.location) {
-    var reg = new RegExp(key + '=(\\S+)')
-    var res = reg.exec(global.location.href)
-    if (res) {
-      name = res[1]
-    }
-  }
-
-  // then localStorage
-  if (null == name) {
-    try {
-      // never test global.localStorage, will also crash in no cookie mode
-      name = localStorage[key]
-    } catch (ignore) {}
-  }
-
-  // then env
-  if (null == name && global.process) {
-    name = _.get(global, ['process', 'env', key])
-  }
-
-  // 没有 name 也要 set, 要清除日志
-  sdk.setName(name)
 }
 
 proto.setOutputer = function(outputName) {
