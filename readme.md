@@ -1,7 +1,7 @@
 min-log
 ---
 
-Debug module for browsers which can Display on page or in Console, for Phone and old IE debugging inspired by [tj@debug](https://github.com/visionmedia/debug)
+Debug module for browsers which can Display on page or in Console, for Phone and old IE debugging
 
 ## Installation
 
@@ -52,27 +52,21 @@ Api | Description
 
 ### Debug Level
 
-1. debug 即 verbose 级别, 开发者才需要关注的调试信息
-1. log 不建议使用, 过于笼统, 不够语义化
-1. info 普通用户需要关注的信息, 比如登入登出
-1. warning 一些警告, 但不严重, 比如 cookie 过期
-1. error 严重的错误, 程序报错, 后端返回错误
-
 Set Level
 
 ```js
 log.setLevel('debug') // set debug level
 ```
 
-### Outputer
-
-Outputer | Usage
+Level | Description
 --- | ---
-`console` | simple console output like `console.log`
-`node_console` | print log with color in node
-`browser_console` | print log with color in browser
-`browser_html` | print log in document by html (for old IE or phone website)
-`vconsole` | print log in vconsole
+`verbose` | Detail and verbose debug log only developper cares
+`debug` | Debug log only developper cares
+`info` | Normal info user should care like login or logout
+`warn` | Some waring user should care like cookie expired
+`error` | Some serious error user should care like server return error
+
+### Outputer
 
 Set Outputer
 
@@ -80,15 +74,33 @@ Set Outputer
 log.setOutputer('browser_color') // set browser color outputer
 ```
 
-### debug style
+Outputer | Usage
+--- | ---
+`console` | Simple console output like `console.log`
+`node_console` | Print log with color in node
+`browser_console` | Print log with color in browser
+`browser_html` | Print log in document by html (for old IE or phone website)
+`vconsole` | Remote call [vConsole](https://github.com/Tencent/vConsole) to print log
 
-if you only use debug level log just like [tj@debug](https://github.com/visionmedia/debug)
+### Debug Style
+
+If you like [tj@debug](https://github.com/visionmedia/debug) and just use `debug` level, you can do this
 
 ```js
 var debug = require('min-log/debug')('http')
 
 debug('booting')
 ```
+
+### Set Config
+
+You can set log config for `min-log`
+
+Name | Purpose
+--- | ---
+`log_name` | Enables/disables specific debugging namespaces
+`log_level` | Set log level like `debug`
+`log_outputer` | Set outputer like `browser_console`
 
 ### Formatter
 
