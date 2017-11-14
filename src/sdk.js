@@ -72,7 +72,7 @@ proto.autoChooseOutputer = function() {
     if (util.supportBrowserColor()) {
       outputer = 'browser_console'
     } else {
-      outputer = 'console'
+      outputer = 'node_console'
     }
   }
   return outputer

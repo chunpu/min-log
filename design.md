@@ -326,3 +326,23 @@ debug 提供了很完美的初始化方案，env 的 debug 和 localStorage 的 
 - glog
 - seelog
 - <http://www.mkideal.com/golang/log.html>
+
+
+TODO
+
+log.download
+
+```js
+      try{
+        var $a = $('<a>')
+          .attr('download', 'xxxxx' + (new Date().getTime()) + '.txt')
+          .attr('href', URL.createObjectURL(new Blob([history.join('\r\n')])))
+          .click();
+        var evt = document.createEvent("HTMLEvents");
+        evt.initEvent("click", false, false);
+        $a[0].dispatchEvent(evt);
+      } catch (e) {
+        var win = window.open('about:blank', 'QHPass Log');
+        win.document.write(history.join('\r\n'));
+      }
+    ```

@@ -1,6 +1,6 @@
 {
   "name": "min-log",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "simple but full function logger",
   "main": "./src/index.js",
   "scripts": {
