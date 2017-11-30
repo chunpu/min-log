@@ -11,6 +11,27 @@ function isIE() {
   return false
 }
 
+function loadScript(url, callback){
+  var ready = false
+  var now = _.now()
+  url = url.replace('__now__', now)
+  var script = document.createElement('script')
+  script.onload = script.onreadystatechange = function() {
+    if (!ready) {
+      if (this.readyState === 'complete' || !this.readyState) {
+        ready = true
+        callback()
+      }
+    }
+  }
+  script.type = 'text/javascript'
+  script.src = url
+  script.async = 1
+
+  var firstScript = document.getElementsByTagName('script')[0]
+  firstScript.parentNode.insertBefore(script, firstScript)
+}
+
 function supportBrowserColor() {
   if (is.wechatApp()) {
     return true
@@ -88,3 +109,4 @@ exports.supportBrowserColor = supportBrowserColor
 exports.safeStringify = safeStringify
 exports.text = text
 exports.getUserOptions = getUserOptions
+exports.loadScript = loadScript

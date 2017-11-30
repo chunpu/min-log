@@ -12,15 +12,12 @@ var proto = Output.prototype
 proto.init = function() {
   if (!this.inited) {
     this.inited = true
-    var vConsoleUrl = '//s.url.cn/qqun/qun/qqweb/m/qun/confession/js/vconsole.min.js'
-    util.loadScript(vConsoleUrl, function() {
+    var erudaUrl = '//cdn.jsdelivr.net/npm/eruda' // 支持 https
+    util.loadScript(erudaUrl, function() {
       // default show
       try {
-        vConsole.show()
+        eruda.init()
       } catch (e) {}
-      window.addEventListener('load', function() {
-        vConsole.show()
-      })
     })
   }
 }

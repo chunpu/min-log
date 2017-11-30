@@ -85,6 +85,7 @@ Outputer | Usage
 `browser_console` | Print log with color in browser
 `browser_html` | Print log in document by html (for old IE or phone website)
 `vconsole` | Remote call [vConsole](https://github.com/Tencent/vConsole) to print log
+`eruda` | Remote call [eruda](https://github.com/liriliri/eruda) to print log
 
 ### Debug Style
 
