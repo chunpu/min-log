@@ -14,7 +14,7 @@ proto.init = function(sdk) {
     var doc = global.document
     if (doc) {
       this.box = doc.createElement('div')
-      this.box.style.cssText = 'z-index:999;padding:16px;height:300px;overflow:auto;line-height:1.4;background:#242424;color:#fff;font:16px Consolas;border:none;text-align:left'
+      this.box.style.cssText = 'z-index:999;padding:16px;height:300px;overflow:auto;line-height:1.4;background:#242424;color:#fff;font-size:16px; font-family: monospace,consolas,"Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;border:none;text-align:left'
       var parent = doc.body || doc.documentElement
       parent.insertBefore(this.box, parent.firstChild)
     }
