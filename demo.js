@@ -1,3 +1,4 @@
+// log.setColors(['#f8f8f2', 'goldenrod', '#66d9ef', '#a6e22e', '#e6db74', '#f92672'])
 var errlog = log.getLogger({name: 'error', color: 'red'})
 var log1 = log.getLogger('main:a')
 var log2 = log.getLogger('main:b')

@@ -69,6 +69,7 @@ Level | Description
 `info` | Normal info user should care like login or logout
 `warn` | Some waring user should care like cookie expired
 `error` | Some serious error user should care like server return error
+`fatal` | Some fatal error which will crash the program
 
 ### Outputer
 
@@ -112,6 +113,15 @@ Name | Purpose
 1. `Query` in page url e.g. `my.site.com/path?log_name=*&log_level=debug&log_output=browser_html`
 1. `localStorage` e.g. `localStorage.log_level = debug`
 1. `Environment` e.g. `log_level=debug log_name=main* node app.js`
+
+
+### Other Config
+
+set log colors
+
+```js
+log.setColors(['#f8f8f2', 'goldenrod', '#66d9ef', '#a6e22e', '#e6db74', '#f92672'])
+```
 
 ### Formatter
 

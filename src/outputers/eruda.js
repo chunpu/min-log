@@ -14,7 +14,6 @@ proto.init = function() {
     this.inited = true
     var erudaUrl = '//cdn.jsdelivr.net/npm/eruda' // 支持 https
     util.loadScript(erudaUrl, function() {
-      // default show
       try {
         eruda.init()
       } catch (e) {}

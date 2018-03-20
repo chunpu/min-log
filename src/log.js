@@ -71,7 +71,7 @@ _.each(levelNames, function(levelName) {
   }
 })
 
-var sdkFuncNames = 'setOptions setOutputer setName setLevel setHistorySize getHistory disableHistory clear save'.split(' ')
+var sdkFuncNames = 'setOptions setOutputer setName setLevel setHistorySize getHistory disableHistory clear save setColors'.split(' ')
 
 _.each(sdkFuncNames, function(name) {
   proto[name] = function() {

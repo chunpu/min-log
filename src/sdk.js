@@ -129,6 +129,10 @@ proto.setName = function(name) {
   return this.setNamePattern(name)
 }
 
+proto.setColors = function(colors) {
+  this.colors = colors
+}
+
 proto.setNamePattern = function(patternStr) {
   // refresh all loggers's enabled state
   var sdk = this
