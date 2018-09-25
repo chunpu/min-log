@@ -10,9 +10,8 @@ Debug module for browsers which can Display on page or in Console, for Phone and
 ## Installation
 
 ```sh
-yarn add min-log
+npm i min-log
 ```
-
 
 ## Usage
 
@@ -20,6 +19,20 @@ yarn add min-log
 var log = require('min-log')
 
 log.debug('hello')
+```
+
+## Direct Replace console
+
+If you already has a project with `console.log`, just add a plugin to webpack config
+
+then `min-log` will take over all consoles
+
+```js
+plugins: [
+  new webpack.ProvidePlugin({
+    console: 'min-log'
+  })
+]
 ```
 
 ### Advanced Usage
