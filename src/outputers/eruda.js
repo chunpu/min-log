@@ -2,23 +2,38 @@
 
 var console = require('./console')
 var util = require('../util')
+var ready = require('min-ready')()
 
 function Output() {
   this.inited = false
+  this.isReady = false
 }
 
 var proto = Output.prototype
 
 proto.init = function() {
-  if (!this.inited) {
-    this.inited = true
+  var me = this
+  if (!me.inited) {
+    me.inited = true
     var erudaUrl = '//cdn.jsdelivr.net/npm/eruda' // 支持 https
     util.loadScript(erudaUrl, function() {
       try {
-        eruda.init()
+        me.run()
       } catch (e) {}
     })
   }
+}
+
+proto.ready = function(func) {
+  ready.queue(func)
+}
+
+proto.run = function() {
+  try {
+    eruda.init()
+    this.isReady = true
+    ready.open()
+  } catch (ignore) {}
 }
 
 proto.handler = console.handler
