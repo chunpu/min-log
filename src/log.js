@@ -54,7 +54,8 @@ proto.output = function(levelCode, data) {
     enabled: log.enabled,
     timestamp: _.now(),
     data: data,
-    color: log.color
+    color: log.color,
+    done: false // if been output
   }
   sdk.output(item)
 }

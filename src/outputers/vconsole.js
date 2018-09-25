@@ -2,27 +2,40 @@
 
 var console = require('./console')
 var util = require('../util')
+var ready = require('min-ready')()
 
 function Output() {
   this.inited = false
+  this.isReady = false
 }
 
 var proto = Output.prototype
 
 proto.init = function() {
-  if (!this.inited) {
-    this.inited = true
+  var me = this
+  if (!me.inited) {
+    me.inited = true
     var vConsoleUrl = '//s.url.cn/qqun/qun/qqweb/m/qun/confession/js/vconsole.min.js'
     util.loadScript(vConsoleUrl, function() {
       // default show
-      try {
-        vConsole.show()
-      } catch (e) {}
+      me.run()
       window.addEventListener('load', function() {
-        vConsole.show()
+        me.run()
       })
     })
   }
+}
+
+proto.ready = function(func) {
+  ready.queue(func)
+}
+
+proto.run = function() {
+  try {
+    vConsole.show()
+    this.isReady = true
+    ready.open()
+  } catch (ignore) {}
 }
 
 proto.handler = console.handler

@@ -12,6 +12,7 @@ module.exports = Sdk
 function Sdk() {
   var sdk = this
   sdk.history = []
+  sdk.pendingItems = [] // logs wait for output
   sdk.Level = Level
   sdk.loggers = {} // logger cache
   sdk.level = null
@@ -91,6 +92,17 @@ proto.setOutputer = function(outputName) {
     if (is.fn(outputer.init)) {
       outputer.init(sdk)
     }
+    if (is.fn(outputer.ready)) {
+      outputer.ready(function() {
+        _.each(sdk.pendingItems, function(item) {
+          if (item.done === false) {
+            outputer.handler(item)
+            item.done = true
+          }
+        })
+        sdk.pendingItems.length = 0
+      })
+    }
   }
 }
 
@@ -99,7 +111,13 @@ proto.output = function(item) {
   if (item.enabled) {
     if (sdk.isLevelEnabled(item.level)) {
       // output enabled log
-      sdk.outputer.handler(item, sdk)
+      var outputer = sdk.outputer
+      if (outputer.isReady === false) {
+        sdk.pendingItems.push(item)
+      } else {
+        outputer.handler(item, sdk)
+        item.done = true
+      }
       sdk.lastItem = item // save last enabled log
     }
   }
