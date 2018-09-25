@@ -6,8 +6,7 @@ var banner = `${pkg.name}@${pkg.version} by ${pkg.author}`
 
 var config = {
   entry: {
-    log: pkg.main,
-    demo: './demo.js'
+    log: pkg.main
   },
   output: {
     path: path.join(__dirname, 'dist'),
