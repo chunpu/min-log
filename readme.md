@@ -3,7 +3,9 @@ min-log
 
 ![browser_console](https://user-images.githubusercontent.com/4565306/31819867-43e78e34-b564-11e7-9ad4-1877c97a3660.png)
 
-Debug module for browsers which can Display on page or in Console, for Phone and old IE debugging
+Better Logger with Custom Level and Outputer Taking over the original console
+
+Support All Browsers which can Display on page or in Console, for Phone and old IE debugging, support wechat miniprogram
 
 [Example page](http://chunpu.github.io/min-log/example)
 
@@ -25,7 +27,7 @@ log.debug('hello')
 
 If you already has a project with `console.log`, just add a plugin to webpack config
 
-then `min-log` will take over all consoles
+then `min-log` will take over all consoles and hide all logs by default
 
 ```js
 plugins: [
@@ -33,6 +35,14 @@ plugins: [
     console: 'min-log'
   })
 ]
+```
+
+If want have logger with namespace
+
+e.g. `animal.js`, use filename as log namespace to take over `console`
+
+```js
+const console = require('min-log').getLogger('animal')
 ```
 
 ### Advanced Usage
@@ -134,6 +144,12 @@ set log colors
 
 ```js
 log.setColors(['#f8f8f2', 'goldenrod', '#66d9ef', '#a6e22e', '#e6db74', '#f92672'])
+```
+
+set log namespace prefix
+
+```js
+log.setPrefix('com:company:')
 ```
 
 ### Formatter

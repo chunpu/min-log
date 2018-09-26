@@ -1,7 +1,7 @@
 {
   "name": "min-log",
-  "version": "2.5.0",
-  "description": "simple but full function logger",
+  "version": "2.6.0",
+  "description": "Better Logger with Custom Level and Outputer Taking over the original console",
   "main": "./src/index.js",
   "scripts": {
     "test": "echo TODO",

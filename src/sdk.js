@@ -124,6 +124,11 @@ proto.output = function(item) {
   sdk.appendHistory(item) // save all log
 }
 
+proto.setPrefix = function(prefix) {
+  var sdk = this
+  sdk.prefix = prefix
+}
+
 proto.isLevelEnabled = function(level) {
   var sdk = this
   if (level >= sdk.level) {
