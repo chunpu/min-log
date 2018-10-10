@@ -7,7 +7,7 @@ Better Logger with Custom Level and Outputer Taking over the original console
 
 Support All Browsers which can Display on page or in Console, for Phone and old IE debugging, support wechat miniprogram
 
-[Example page](http://chunpu.github.io/min-log/example)
+[Example page](https://chunpu.github.io/min-log)
 
 ## Installation
 

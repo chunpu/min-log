@@ -1,6 +1,6 @@
 {
   "name": "min-log",
-  "version": "2.6.0",
+  "version": "2.6.1",
   "description": "Better Logger with Custom Level and Outputer Taking over the original console",
   "main": "./src/index.js",
   "scripts": {

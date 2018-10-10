@@ -69,9 +69,11 @@ function getUserOptions(keys) {
     var query = qs.parse(_.slice(location.search, 1))
     pool.push(query)
   }
-  if (global.localStorage) {
-    pool.push(localStorage)
-  }
+  try {
+    if (global.localStorage) {
+      pool.push(localStorage)
+    }
+  } catch (ignore) {}
   var env = _.get(global, ['process', 'env'])
   if (env) {
     pool.push(env)
